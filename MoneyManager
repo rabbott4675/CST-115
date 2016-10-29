@@ -1,0 +1,65 @@
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
+import javax.swing.*;
+import java.text.NumberFormat;
+
+public class Main extends Application {
+
+    double price = 1.50; //Add Product Price
+
+    Text label;
+    TextField moneyInserted;
+    Button moneyManager;
+    Text dispenseChange;
+
+    @Override
+    public void start(Stage primaryStage) {
+
+        HBox pane = new HBox(10);
+        pane.setAlignment(Pos.CENTER);
+        JPanel panel = new JPanel();
+
+
+        label = new Text("Enter Amount Desposited");
+        moneyInserted = new TextField();
+        moneyManager = new Button("Dispense Money");
+        dispenseChange = new Text("Test");
+
+        MoneyHandler handled = new MoneyHandler();
+        moneyManager.setOnAction(handled);
+
+        pane.getChildren().addAll(label, moneyInserted, moneyManager, dispenseChange);
+
+        Scene scene = new Scene(pane, 600, 400);
+        primaryStage.setTitle("Dispenser");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+    }
+
+    class MoneyHandler implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent e) {
+            String dm = moneyInserted.getText();
+            double doubleMoney = Double.parseDouble(dm);
+            if (doubleMoney > price) {
+                double change = price - doubleMoney;
+                NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                dispenseChange.setText("Dispensing " + formatter.format(change));
+            } else {
+                dispenseChange.setText("I'm sorry you need to isert more money");
+            }
+
+        }
+    }
+
+}
